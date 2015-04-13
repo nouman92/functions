@@ -9,7 +9,7 @@ include 'header.php';
 			<div class="form-group">
 				<label for="code">New Code</label>
 				<span class="form-group">
-				<textarea name="code" id='code' class="lined"  style="height:400px; width:100%;" placeholder="Write Your Code Here" spellcheck="false" autocapitalize="off" autocorrect="off" autocomplete="off">function </textarea>
+				<textarea name="code" id='code' class="lined"  style="height:400px; width:100%;" placeholder="Write Your Code Here" spellcheck="false" autocapitalize="off" autocorrect="off" autocomplete="off"></textarea>
 				</span> </div>
 			<input type="button"  id="Submit1" value="Execute" class="btn btn-default" />
 		</form>
@@ -51,7 +51,7 @@ include 'header.php';
 			 var data = document.getElementById("function"+id);
 			 var form = document.getElementById("code");
              form.innerHTML = "";
-			 form.innerHTML = data.innerHTML;
+			 form.appendChild(document.createTextNode(data.innerHTML));
 		}
 	</script>
 </div>

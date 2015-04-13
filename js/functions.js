@@ -27,7 +27,7 @@ $(document).ready(function() {
 function test()
 {
 	debugger;
-	var pattern = new RegExp("[a-z]+[[0-9]+]", "g");
+	var pattern = new RegExp("[a-z]+[[0-9]*]", "g");
   
 	var code = $("#code").val();
       var prototype = code.substring(0, code.indexOf(")") + 1);
@@ -43,7 +43,7 @@ function test()
 function makeform() {
   $("#code").prop("readonly", true);
   var code = $("#code").val();
-  var pattern = new RegExp("[a-z]+[[0-9]+]");
+  var pattern = new RegExp("[a-z]+[[0-9]*]");
   var parameters = code.substring(code.indexOf("(") + 1, code.indexOf(")")).split(",");
   var function_name = code.substring(0, code.indexOf(")") + 1);
   if (parameters.length == 1 && parameters[0].replace(/^\s+/, "").replace(/\s+$/, "") === "") {
@@ -61,19 +61,31 @@ function makeform() {
     form.appendChild(document.createElement("br"));
     for (var i = 0;i < parameters.length;i++) {
       if (pattern.test(parameters[i])) {
-        var size = parseInt(parameters[i].charAt(parameters[i].indexOf("[") + 1));
-        if (size > 0) {
+		  debugger;
+        var size = parseInt(parameters[i].substring(parameters[i].indexOf("[") + 1,parameters[i].indexOf("]") ));
+       if(isNaN(size))
+	  {
+		  var lable = document.createElement("label");
+          var text = document.createTextNode("Value for " + parameters[i]);
+          lable.appendChild(text);
+		  lable.setAttribute("for", parameters[i]);
+		  $("#outputform").append(lable);
+          $("#outputform").append('<form class="form-control" id="arr_' + i + '"></form>');
+		  $("#arr_" + i).append('<input type="button" onclick=rmelement('+i+'); value="-"  style="width:30px;margin-left:4px;" />')
+		  $("#arr_" + i).append('<input class="remove" type="button" onclick=addelement('+i+'); value="+"  style="width:30px;margin-left:4px;" />');
+		  $("#arr_" + i).append('<input  type="text" style="width:30px;margin-left:4px;">');
+      }else if (size > 0) {
           var lable = document.createElement("label");
           var text = document.createTextNode("Value for " + parameters[i]);
           lable.appendChild(text);
           lable.setAttribute("for", parameters[i]);
           $("#outputform").append(lable);
           $("#outputform").append('<form class="form-control" id="arr_' + i + '"></form>');
-          for (var j = 1;j <= size;j++) {
+          for (var j = 0;j < size;j++) {
             $("#arr_" + i).append('<input placeholder="' + j + '" type="text" id="arr_' + i + '"style="width:30px;margin-left:4px;">');
           }
         }
-      } else {
+	  } else {
         var lable = document.createElement("label");
         var text = document.createTextNode("value for " + parameters[i]);
         lable.appendChild(text);
@@ -111,35 +123,39 @@ function makeform() {
   }
 }
 function Read_Inputs(parameters) {
+	var in_data;
   var code = $("#code").val();
-  var pattern = new RegExp("[a-z]+[[0-9]+]", "g");
   var function_call = code.substring(0, code.indexOf("(") + 1);
   var expression = "";
   try {
     $("#Submit2").click(function() {
-      for (var i = 0;i < parameters.length;i++) {
+      debugger;
+	  var pattern = new RegExp("[a-z]+[[0-9]*]", "g");
+	  for (var i = 0;i < parameters.length;i++) {
         if (pattern.test(parameters[i])) {
           var arr = new Array;
-          var array_elements = document.getElementById("arr_" + i).elements;
+		  var array_elements = document.getElementById("arr_" + i).elements;
           for (var j = 0, element;element = array_elements[j++];) {
             if (element.type === "text") {
               if (element.value != "") {
                 arr.push(element.value);
               } else {
-                alert("Please Prvide Input for " + element.name);
-                break;
+                alert("Please Provide All Inputs for " + parameters[i]);
+                return;
               }
             }
           }
+		  in_data += "array:{"+arr+"} ,";
           expression += "var " + parameters[i].substring(0, parameters[i].indexOf("[")) + " = [" + arr + "];";
           function_call += parameters[i].substring(0, parameters[i].indexOf("[")) + ",";
         } else {
           var element = document.getElementById(parameters[i]);
           if (element.value != "") {
+			in_data += element.value  +" ,";
             function_call += element.value + ",";
           } else {
-            alert("Please Prvide Input for " + element.name);
-            break;
+                alert("Please Provide All Inputs for " + parameters[i]);
+                return;
           }
         }
       }
@@ -163,7 +179,7 @@ function Read_Inputs(parameters) {
 	   $.ajax({
             type: "POST",
             url: "./store.php",
-            data: {input: prototype , code : $("#code").val() , output: eval(function_call+";")},
+            data: {input: in_data , code : $("#code").val() , output: eval(function_call+";")},
 			success: function(data){  
 				//alert("Data added to db");
             },
@@ -188,6 +204,15 @@ function Read_Inputs(parameters) {
     form.appendChild(document.createElement("br"));
     form.appendChild(document.createTextNode(e.message));
   }
+}
+function addelement(form)
+{
+	 $("#arr_" + form).append('<input  type="text" style="width:30px;margin-left:4px;">');
+}
+function rmelement(form)
+{
+	if(!$("#arr_" + form).children().last().is(document.getElementsByClassName('remove')) )
+	 	$("#arr_" + form).children().last().remove();
 }
 $("#Submit3").click(function() {
   var form = document.getElementById("outputform");
