@@ -110,8 +110,9 @@ function makeform() {
     form.appendChild(document.createElement("br"));
     var input = document.createElement("input");
     input.setAttribute("type", "button");
-    input.setAttribute("id", "Fetech");
-    input.setAttribute("Value", "Use Existing Data Sets");
+    input.setAttribute("id", "fetch");
+	input.setAttribute("onclick", "random_data()");
+    input.setAttribute("Value", "Use Random Data");
     form.appendChild(input);
     Read_Inputs(parameters);
   } else {
@@ -123,7 +124,7 @@ function makeform() {
   }
 }
 function Read_Inputs(parameters) {
-	var in_data;
+	var in_data='';
   var code = $("#code").val();
   var function_call = code.substring(0, code.indexOf("(") + 1);
   var expression = "";
@@ -145,13 +146,13 @@ function Read_Inputs(parameters) {
               }
             }
           }
-		  in_data += "array:{"+arr+"} ,";
+		  in_data += "array:{"+arr+"} ;";
           expression += "var " + parameters[i].substring(0, parameters[i].indexOf("[")) + " = [" + arr + "];";
           function_call += parameters[i].substring(0, parameters[i].indexOf("[")) + ",";
         } else {
           var element = document.getElementById(parameters[i]);
           if (element.value != "") {
-			in_data += element.value  +" ,";
+			in_data += element.value  +" ;";
             function_call += element.value + ",";
           } else {
                 alert("Please Provide All Inputs for " + parameters[i]);
@@ -214,6 +215,24 @@ function rmelement(form)
 	if(!$("#arr_" + form).children().last().is(document.getElementsByClassName('remove')) )
 	 	$("#arr_" + form).children().last().remove();
 }
+function random_data()
+{
+	debugger;
+	var inputs=$("#outputform input[type='text']");
+	for(var i=0 ; i < inputs.size() ; i++)
+	{
+		inputs[i].value=Math.floor((Math.random() * 10) + 1);
+	}
+	var arrays=$("#outputform form");
+	for(var i=0 ; i < arrays.size() ; i++)
+	{
+			for (var j = 0, element;element = arrays[j++];) {
+            if (element.type === "text") {
+				element.value= Math.floor((Math.random() * 10) + 1);
+				}
+			}
+	}
+}
 $("#Submit3").click(function() {
   var form = document.getElementById("outputform");
   form.innerHTML = "";
@@ -243,7 +262,7 @@ function display_output(function_name, result) {
   form.appendChild(document.createElement("br"));
   form.appendChild(document.createElement("br"));
   var resetbtn = document.createElement("input");
-  resetbtn.setAttribute("type", "button");
+  resetbtn.setAttribute("type", "submit");
   resetbtn.setAttribute("id", "Submit3");
   resetbtn.setAttribute("value", "Reset");
   form.appendChild(resetbtn);
