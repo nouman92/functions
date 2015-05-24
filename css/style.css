@@ -1,6 +1,21 @@
-
-	
-	
+td {
+text-align:left;
+vertical-align:top;
+}
+th {
+text-align:left;
+}
+textarea{font-family:monospace;}
+.editor {
+  border: 1px solid #ccc;
+  background: #f6f6f6;
+  display: table;
+}
+.box {
+  border: 1px solid #ccc;
+  background: #f6f6f6;
+  display: table;
+}	
 	/* FOOTER */
 	
 	

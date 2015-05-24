@@ -33,25 +33,33 @@ if (isset($_SESSION['FBID']))
 				</div>
 			</fieldset>
 		</form>
-	</div>
-</div>
+
 <?php  //if submit is not blanked i.e. it is clicked.
 if (isset($_REQUEST['Submit'])) //here give the name of your button on which you would like    //to perform action.
 {
 // here check the submitted text box for null value by giving there name.
 	if($_REQUEST['user_email']=="" || $_REQUEST['password']=="")
 	{
-	echo ' <div class="alert alert-danger alert-error ">
+	echo '<div class="row"><div class="col-xs-12 col-sm-12 col-md-12" style="margin-top:20px"> 
+		<div class="alert alert-danger alert-error ">
         <a href="#" class="close" data-dismiss="alert">&times;</a>
         <strong>Error!</strong> All fields must be filled.
-    </div>';
+    	</div>
+		</div>
+		</div>';
 	}
 	else
 	{
-	   $sql1= "select * from Users where Femail= '".$_REQUEST['user_email']."' &&  password ='".$_REQUEST['password']."'";
+	   $sql1= "select * from users where Femail= '".$_REQUEST['user_email']."' &&  password ='".$_REQUEST['password']."'";
   	   $result=mysql_query($sql1)
-	    or exit("Sql Error".mysql_error());
-	    $num_rows=mysql_num_rows($result);
+	    or 
+		die ( '<div class="row">
+			  <div class="col-xs-12 col-sm-12 col-md-12" style="margin-top:20px"> 
+			  <div class="alert alert-danger alert-error ">
+			  <a href="#" class="close" data-dismiss="alert">&times;</a>
+			  '.mysql_error().
+			  '</div></div></div>' );
+       $num_rows=mysql_num_rows($result);
 	   if($num_rows>0)
 	   {
 		   $row = mysql_fetch_row($result);
@@ -72,4 +80,6 @@ if (isset($_REQUEST['Submit'])) //here give the name of your button on which you
 	}
 }
 ?>
+	</div>
+</div>
 <?php include 'footer.php'; ?>

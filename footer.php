@@ -30,7 +30,7 @@
 					<input name="emailTo" type="hidden" value="info@assurancegroup.co.uk">
 					<input class="form-control" name="txtName" id="txtName" type="text" placeholder="Your Name..." value="">
 					<input class="form-control" name="txtEmail" id="txtEmail" type="text" placeholder="Your Email Address..." value="">
-					<textarea class="form-control" name="txtText" id="txtText" placeholder="Your Message...">Your Message...</textarea>
+					<textarea class="form-control" name="txtText" id="txtText" placeholder="Your Message..."></textarea>
 					<button class="btn btn-default" type="button">SEND MESSAGE</button>
 					<div id="spanMessage"></div>
 				</form>
