@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: May 24, 2015 at 08:59 AM
+-- Generation Time: May 26, 2015 at 10:42 AM
 -- Server version: 5.5.32
 -- PHP Version: 5.4.16
 
@@ -32,30 +32,23 @@ CREATE TABLE IF NOT EXISTS `functions` (
   `fid` int(11) NOT NULL AUTO_INCREMENT,
   `UID` bigint(20) unsigned NOT NULL,
   `function` text NOT NULL,
-  `tag` varchar(200) NOT NULL,
   `private` tinyint(4) NOT NULL,
   `name` varchar(250) NOT NULL DEFAULT '',
   PRIMARY KEY (`fid`),
   KEY `UID` (`UID`),
   KEY `UID_2` (`UID`),
   KEY `UID_3` (`UID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=11 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=12 ;
 
 --
 -- Dumping data for table `functions`
 --
 
-INSERT INTO `functions` (`fid`, `UID`, `function`, `tag`, `private`, `name`) VALUES
-(1, 1, 'function sum(w)\n{\nreturn w+3;\n}', '', 0, 'sum'),
-(2, 1, 'function subtract(a,b)\n{\nreturn a-b;\n}', '', 0, 'subtract'),
-(3, 1, 'function sum(w)\n{\nreturn 3;\n}', '', 0, ''),
-(4, 4, 'function sum(w)\n{\nreturn 34;\n}', '', 0, 'sum(w)'),
-(5, 4, 'function sum(w)\n{\nreturn w+3;\n}', '', 0, 'sum(w)'),
-(6, 1, 'sum(w,ada[15])\n{\nreturn w+3;\n}', '', 0, 'sum(w,ada[15])'),
-(7, 1, 'sum(w,ada[])\n{\nreturn w+3;\n}', '', 0, 'sum(w,ada[])'),
-(8, 1, 'add(a,b,c,d[66])\n{\nreturn a+b+c;\n}', '', 0, 'add(a,b,s,d[66])'),
-(9, 4, 'add(a,b,c,d[])\n{\nreturn a+b+c;\n}', '', 0, 'add(a,b,c,d[])'),
-(10, 4, 'sum (a,b)\n{\n  return a+b;\n}\n', '', 0, 'sum(a,b)');
+INSERT INTO `functions` (`fid`, `UID`, `function`, `private`, `name`) VALUES
+(8, 1, 'add(a,b,c,d[66])\n{\nreturn a+b+c;\n}', 0, 'add(a,b,s,d[66])'),
+(9, 4, 'add(a,b,c,d[])\n{\nreturn a+b+c;\n}', 0, 'add(a,b,c,d[])'),
+(10, 4, 'sum (a,b)\n{\n  return a+b;\n}\n', 0, 'sum(a,b)'),
+(11, 4, 'randome(e)\n{\nreturn e;\n}', 0, '');
 
 -- --------------------------------------------------------
 
@@ -74,16 +67,10 @@ CREATE TABLE IF NOT EXISTS `inputs` (
 --
 
 INSERT INTO `inputs` (`fid`, `input`) VALUES
-(1, 'sum(w)'),
-(2, 'subtract(a,b)'),
-(3, 'sum(w)'),
-(4, 'sum(w)'),
-(5, 'sum(w)'),
-(6, 'undefined3 ,3 ,array:{4,5,5,5,5,6,6,6,67,7,7,8,8,8,8} ,'),
-(7, 'undefined3 ,array:{5,6,6,7} ,'),
 (8, '1 ;7 ;2 ;array:{8,2,8,2,5,6,1,5,7,5,2,3,5,1,6,5,10,7,8,3,9,6,3,7,3,9,8,9,5,7,1,10,5,6,4,8,9,9,10,6,6,7,5,6,10,9,1,1,4,2,4,6,5,9,2,7,4,2,4,3,8,9,2,8,9,5} ;'),
 (9, '1 ;4 ;2 ;array:{9,2,10,1,8,7,5,2} ;'),
-(10, '3 ;4 ;');
+(10, '3 ;4 ;'),
+(11, '4 ;');
 
 -- --------------------------------------------------------
 
@@ -102,15 +89,30 @@ CREATE TABLE IF NOT EXISTS `outputs` (
 --
 
 INSERT INTO `outputs` (`fid`, `output`) VALUES
-(2, '-1'),
-(3, '3'),
-(4, '34'),
-(5, '7'),
-(6, '6'),
-(7, '6'),
 (8, '10'),
 (9, '7'),
-(10, '7');
+(10, '7'),
+(11, '4');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tags`
+--
+
+CREATE TABLE IF NOT EXISTS `tags` (
+  `fid` int(11) NOT NULL,
+  `tag` varchar(30) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `tags`
+--
+
+INSERT INTO `tags` (`fid`, `tag`) VALUES
+(11, 'java'),
+(11, 'java,sort'),
+(11, 'randome');
 
 -- --------------------------------------------------------
 

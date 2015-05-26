@@ -11,9 +11,11 @@ $(document).ready(function() {
   });
   $("#Submit1").click(function() {
     try {
+		store_locally();
 		test();
 		includes();
         makeform();
+		Read_Inputs();
     } catch (e) {
       $("#code").prop("readonly", false);
       var form = document.getElementById("outputform");
@@ -33,17 +35,63 @@ $(document).ready(function() {
   });
 });
 
+function store_locally()
+{
+	debugger;
+	var div_functions=document.getElementById("includes").childNodes;
+	var function_id=[];
+	for(var i=0; i <div_functions.length ; i++)
+	{
+		function_id.push(div_functions[i].childNodes[1].textContent.split(":")[0]);
+		 
+	}
+	localStorage["function_ids"] = JSON.stringify(function_id);
+	//--------------------------------------------------------------
+	var div_tags=document.getElementById("tags").childNodes;
+	var tags = [];
+	for(var i=0; i <div_tags.length ; i++){
+		tags.push(div_tags[i].childNodes[1].textContent);
+	}
+	localStorage["tags"] = JSON.stringify(tags);
+	var storedNames = JSON.parse(localStorage["tags"]);
+	var tags = localStorage["tags"];
+	//--------------------------------------------------------------
+	
+	var pattern = new RegExp("[a-z]+[[0-9]*]", "g");
+	//--------------------------------------------------------------
+	var code  = document.getElementById("code").value;
+	var parameters = code.substring(code.indexOf("(") + 1, code.indexOf(")")).split(",");
+    localStorage["parameters"] = JSON.stringify(parameters);
+	//--------------------------------------------------------------
+	var function_name = code.substring(0, code.indexOf(")") + 1);
+	localStorage["function_name"] = function_name;
+	//--------------------------------------------------------------  
+	localStorage["orignal_code"] = code;
+	//--------------------------------------------------------------
+	var prototype = code.substring(0, code.indexOf(")") + 1);
+    var arrays = prototype.match(pattern);
+	if(arrays != null)
+	  for (var i = 0;i < arrays.length;i++) {
+		prototype = prototype.replace(arrays[i], arrays[i].substring(0, arrays[i].indexOf("[")));
+	  }
+	localStorage["prototype"] = prototype;
+	//--------------------------------------------------------------
+	code = "function " + prototype + code.substring(code.indexOf(")") + 1, code.lastIndexOf("}") + 1)
+	localStorage["code"] = code;
+	//--------------------------------------------------------------
+	  
+}
+
 function includes()
 {
 	debugger;
-	var functions=document.getElementById("includes").childNodes;
-	for(var i=0; i <functions.length ; i++)
+	var ids = JSON.parse(localStorage["function_ids"]);
+	for(var i=0; i <ids.length ; i++)
 	{
-		var id=functions[i].childNodes[1].textContent.split(":");
 		 $.ajax({
             type: "POST",
             url: "./get_func.php",
-            data: {id: id[0]},
+            data: {id: ids[0]},
 			success: function(data){  
 				var script = document.createElement("script");
     			script.type = "text/javascript";
@@ -60,31 +108,18 @@ function includes()
 function test()
 {
 	debugger;
-	var pattern = new RegExp("[a-z]+[[0-9]*]", "g");
-  
-	var code = $("#code").val();
-      var prototype = code.substring(0, code.indexOf(")") + 1);
-      var arrays = prototype.match(pattern);
-	  if(arrays != null)
-		  for (var i = 0;i < arrays.length;i++) {
-			prototype = prototype.replace(arrays[i], arrays[i].substring(0, arrays[i].indexOf("[")));
-		  }
-	  code = "function " + prototype + code.substring(code.indexOf(")") + 1, code.lastIndexOf("}") + 1);
-	  eval(code);
-
+	var code = localStorage["code"]
+	eval(code);
 }
-
-
 
 function makeform() {
   $("#code").prop("readonly", true);
   var code = $("#code").val();
   var pattern = new RegExp("[a-z]+[[0-9]*]");
-  var parameters = code.substring(code.indexOf("(") + 1, code.indexOf(")")).split(",");
-  var function_name = code.substring(0, code.indexOf(")") + 1);
-  if (parameters.length == 1 && parameters[0].replace(/^\s+/, "").replace(/\s+$/, "") === "") {
-    parameters = new Array;
-  }
+  
+  var parameters = JSON.parse(localStorage["parameters"]);
+  var function_name =  localStorage["function_name"] ;
+  // check for parameter null
   if (parameters.length != 0) {
     var form = document.getElementById("outputform");
     form.innerHTML = "";
@@ -150,7 +185,17 @@ function makeform() {
 	input.setAttribute("onclick", "random_data()");
     input.setAttribute("Value", "Use Random Data");
     form.appendChild(input);
-    Read_Inputs(parameters);
+	
+	form.appendChild(document.createElement("br"));
+    form.appendChild(document.createTextNode("---OR---"));
+    form.appendChild(document.createElement("br"));
+    var input = document.createElement("input");
+    input.setAttribute("type", "button");
+    input.setAttribute("id", "fetch");
+	input.setAttribute("onclick", "use_Dataset()");
+    input.setAttribute("Value", "Use From Data Set");
+    form.appendChild(input);
+    
   } else {
     var script = document.createElement("script");
     script.type = "text/javascript";
@@ -161,10 +206,11 @@ function makeform() {
 }
 
 
-function Read_Inputs(parameters) {
-	var in_data='';
-  var code = $("#code").val();
-  var function_call = code.substring(0, code.indexOf("(") + 1);
+function Read_Inputs() {
+  var parameters = JSON.parse(localStorage["parameters"]);
+  var in_data='';
+  var fname = localStorage["function_name"];
+  var function_call = fname.substring(0, fname.indexOf("(") + 1);
   var expression = "";
   try {
     $("#Submit2").click(function() {
@@ -200,27 +246,21 @@ function Read_Inputs(parameters) {
       }
       debugger;
       function_call = function_call.substring(0, function_call.lastIndexOf(",")) + ")";
-      var code = $("#code").val();
-      var prototype = code.substring(0, code.indexOf(")") + 1);
-      var arrays = prototype.match(pattern);
-	  if(arrays != null)
-		  for (var i = 0;i < arrays.length;i++) {
-			prototype = prototype.replace(arrays[i], arrays[i].substring(0, arrays[i].indexOf("[")));
-		  }
-	  code = "function " + prototype + code.substring(code.indexOf(")") + 1, code.lastIndexOf("}") + 1);
+      var code = localStorage["code"];
       var script = document.createElement("script");
       script.type = "text/javascript";
       script.appendChild(document.createTextNode(code));
-	  expression += 'display_output( "' + prototype + '" ,' + function_call + ");";
+	  expression += 'display_output( "' + localStorage["prototype"] + '" ,' + function_call + ");";
 	  script.appendChild(document.createTextNode(expression));
       $("head").append(script);
 	  debugger;
 	   $.ajax({
             type: "POST",
             url: "./store.php",
-            data: {input: in_data , code : $("#code").val() , output: eval(function_call+";")},
+            data: {input: in_data , code : localStorage["orignal_code"] , output: eval(function_call+";"), tags : localStorage["tags"]},
 			success: function(data){  
-				//alert("Data added to db");
+				//alert(data);
+				localStorage.clear();
             },
             error: function(XMLHttpRequest, textStatus, errorThrown) { 
                     alert("Status: " + textStatus); alert("Error: " + errorThrown); 
@@ -320,3 +360,108 @@ function add_tag(e)
 	 event.preventDefault();
 }
     
+	
+function ajaxFunction(str)
+{
+var httpxml;
+try
+  {
+  // Firefox, Opera 8.0+, Safari
+  httpxml=new XMLHttpRequest();
+  }
+catch (e)
+  {
+  // Internet Explorer
+  try
+    {
+    httpxml=new ActiveXObject("Msxml2.XMLHTTP");
+    }
+  catch (e)
+    {
+    try
+      {
+      httpxml=new ActiveXObject("Microsoft.XMLHTTP");
+      }
+    catch (e)
+      {
+      alert("Your browser does not support AJAX!");
+      return false;
+      }
+    }
+  }
+function stateChanged() 
+{
+	if(httpxml.readyState==4){
+		document.getElementById("displayDiv").innerHTML=httpxml.responseText;
+		document.getElementById("msg").style.display='none';
+	}
+}
+	var url="ajax-search-demock.php";
+	url=url+"?txt="+str;
+	url=url+"&sid="+Math.random();
+	httpxml.onreadystatechange=stateChanged;
+	httpxml.open("GET",url,true);
+	httpxml.send(null);
+	document.getElementById("msg").innerHTML="Please Wait ...";
+	document.getElementById("msg").style.display='inline';
+}
+
+function ajax_tag_data(str)
+{
+	
+var httpxml;
+try
+  {
+  // Firefox, Opera 8.0+, Safari
+  httpxml=new XMLHttpRequest();
+  }
+catch (e)
+  {
+  // Internet Explorer
+  try
+    {
+    httpxml=new ActiveXObject("Msxml2.XMLHTTP");
+    }
+  catch (e)
+    {
+    try
+      {
+      httpxml=new ActiveXObject("Microsoft.XMLHTTP");
+      }
+    catch (e)
+      {
+      alert("Your browser does not support AJAX!");
+      return false;
+      }
+    }
+  }
+	function datachange() 
+	{
+		if(httpxml.readyState==4){
+			document.getElementById("displayTags").innerHTML=httpxml.responseText;
+		}
+	}
+	var url="ajax-search-data.php";
+	url=url+"?txt="+str;
+	httpxml.onreadystatechange=datachange;
+	httpxml.open("GET",url,true);
+	httpxml.send(null)
+}
+function use(id)
+{
+	debugger;
+	var inputs=$("#outputform input[type='text']");
+	for(var i=0 ; i < inputs.size() ; i++)
+	{
+		inputs[i].value=Math.floor((Math.random() * 10) + 1);
+	}
+	var arrays=$("#outputform form");
+	for(var i=0 ; i < arrays.size() ; i++)
+	{
+			for (var j = 0, element;element = arrays[j++];) {
+            if (element.type === "text") {
+				element.value= Math.floor((Math.random() * 10) + 1);
+				}
+			}
+	}
+}

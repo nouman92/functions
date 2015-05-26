@@ -41,6 +41,52 @@ include 'header.php';
       <input type="text" class="form-control" id="incude" onkeyup="ajaxFunction(this.value);"  />
       <div id="displayDiv"></div>
       <div id="includes" name="includes"></div>
+      <script>
+      function use_Dataset()
+	  {
+		  debugger;
+		  document.getElementById("outputform").innerHTML='';
+		  $("#outputform").append("<br/><label>Search data</label><br/><input type='text' class='form-control' id='datatag' onkeyup='ajax_tag_data(this.value);' /><br/> <div id='displayTags'></div><br/><div id='displaydata'></div>");
+	  }
+	  function selected_input(str)
+		{
+			debugger;
+			var httpxml;
+			try  {
+			  // Firefox, Opera 8.0+, Safari
+			  httpxml=new XMLHttpRequest();
+			  }
+			catch (e){
+			  // Internet Explorer
+			  try{
+					httpxml=new ActiveXObject("Msxml2.XMLHTTP");
+			  }
+			  catch (e){
+				try{
+				  httpxml=new ActiveXObject("Microsoft.XMLHTTP");
+				  }
+				catch (e){
+				  alert("Your browser does not support AJAX!");
+				  return false;
+				  }
+				}
+			}
+			var url="get_inputs.php";
+			str=str.options[str.selectedIndex].value.split(":")[0];
+			url=url+"?id="+str;
+			function dataget() 
+			{
+				if(httpxml.readyState==4){
+					document.getElementById("displaydata").innerHTML=httpxml.responseText;
+				}
+			}
+			httpxml.onreadystatechange=dataget;
+			httpxml.open("GET",url,true);
+			httpxml.send(null);
+			var list=document.getElementById("displayTags");
+			list.innerHTML="";
+		}
+      </script>
     </form>
   </div>
 </div>
