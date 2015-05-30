@@ -236,7 +236,7 @@ function Read_Inputs() {
         } else {
           var element = document.getElementById(parameters[i]);
           if (element.value != "") {
-			in_data += element.value  +" ;";
+			in_data += element.value  +";";
             function_call += element.value + ",";
           } else {
                 alert("Please Provide All Inputs for " + parameters[i]);
@@ -450,18 +450,60 @@ catch (e)
 function use(id)
 {
 	debugger;
-	var inputs=$("#outputform input[type='text']");
+	var variables;
+	makeform();
+	$.ajax({
+            type: "GET",
+            url: "./get_func.php",
+            data: {id: id},
+			success: function(data){ 
+			debugger; 
+				variables= data.split(';');
+				var inputs=$("#outputform input[type='text']");
+	var singles=[];
+	var array=[];
+	for(var i=0 ; i < variables.length ; i++)
+	{
+		if(variables[i].indexOf("array") == -1)
+		{
+			singles.push(variables[i]);
+		}
+		else
+		{
+			array.push(variables[i].substring(variables[i].lastIndexOf("{")+1,variables[i].lastIndexOf("}")));
+		}
+			
+	}
+	singles.pop();
 	for(var i=0 ; i < inputs.size() ; i++)
 	{
-		inputs[i].value=Math.floor((Math.random() * 10) + 1);
+		try{
+		inputs[i].value=singles.pop();
+		}catch(e)
+		{
+			inputs[i].value=Math.floor((Math.random() * 10) + 1);
+		}
 	}
 	var arrays=$("#outputform form");
 	for(var i=0 ; i < arrays.size() ; i++)
-	{
+	{      
+		var dat=array.pop();
 			for (var j = 0, element;element = arrays[j++];) {
             if (element.type === "text") {
+				try{
+				element.value= dat[j];
+				}
+				catch(e)
+				{
 				element.value= Math.floor((Math.random() * 10) + 1);
 				}
 			}
 	}
+	}
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown) { 
+                    alert("Status: " + textStatus); alert("Error: " + errorThrown); 
+			}
+        });
+		 Read_Inputs();
 }
