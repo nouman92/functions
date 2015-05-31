@@ -1,5 +1,5 @@
 <?php
-require './conf/dbconfig.php';
+require '../conf/dbconfig.php';
 session_start();
 if (isset($_SESSION['FBID']))
 {

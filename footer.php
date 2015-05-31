@@ -1,43 +1,38 @@
 <div style="margin-top: 40px;"></div>
-<footer id='footer' class="panel-footer ">
-	<div class="bottom">
-		<div class="container">
-			<div class="col-md-4">
-				<h3><span class="glyphicon glyphicon-heart"></span> About us</h3>
-				<p><a href="./">Algorithem Executer V 1.0</a></p>
-			</div>
-			<div class="col-md-4">
-				<h3><span class="glyphicon glyphicon-star"></span> Follow us</h3>
-				<p>
-				<div class="socailfollow">
-				 <a class="twitter" href="#"><i class="icomoon-twitter"></i></a>
-				 <a class="facebook" href="#"><i class="icomoon-facebook"></i></a>
-				 <a class="youtube" href="#"><i class="icomoon-youtube"></i></a>
-				 <a class="linkedin" href="#"><i class="icomoon-linkedin"></i></a>
-				 <a class="dribble" href="#"><i class="icomoon-dribbble"></i></a>
-				 <a class="pinterest" href="#"><i class="icomoon-pinterest"></i></a>
-				 <a class="vimeo" href="#"><i class="icomoon-vimeo"></i></a>
-				 <a class="google" href="#"><i class="icomoon-google"></i></a>
-				 <a class="rss" href="#"><i class="icomoon-feed-3"></i></a>
-					<div class="clear"></div>
-				</div>
+
+	<footer class="footer-distributed">
+			<div class="footer-left">
+				<h3>Algorithm<span>Executor</span></h3>
+				<p class="footer-links">
+					<a href="./">Home</a>
 				</p>
+				<p class="footer-company-name">Algorithm Executor &copy; 2015</p>
 			</div>
-			<div class="col-md-4">
-				<h3><span class="glyphicon glyphicon-music"></span> Contact us</h3>
-				<p>
-				<form class="form-group" action="#">
-					<input name="emailTo" type="hidden" value="info@assurancegroup.co.uk">
-					<input class="form-control" name="txtName" id="txtName" type="text" placeholder="Your Name..." value="">
-					<input class="form-control" name="txtEmail" id="txtEmail" type="text" placeholder="Your Email Address..." value="">
-					<textarea class="form-control" name="txtText" id="txtText" placeholder="Your Message..."></textarea>
-					<button class="btn btn-default" type="button">SEND MESSAGE</button>
-					<div id="spanMessage"></div>
-				</form>
+			<div class="footer-center">
+				<div>
+					<i class="fa fa-map-marker"></i>
+					<p><span>New AnarKali</span> Lahore, Pakistan</p>
+				</div>
+				<div>
+					<i class="fa fa-phone"></i>
+					<p>+92 312 8083622</p>
+				</div>
+				<div>
+					<i class="fa fa-envelope"></i>
+					<p><a href="mailto:support@company.com">Bcsf11a001@pucit.edu.pk</a></p>
+				</div>
 			</div>
-			</p>
-		</div>
-	</div>
-	</div>
-</footer>
-</body></html>
+			<div class="footer-right">
+				<p class="footer-company-about">
+					<span>About the System</span>
+					Easy To use psudeo code Executor , which allows you to write your logic in form of psudo code and convert it into any programming language or just execute it to see the output.
+				</p>
+				<div class="footer-icons">
+					<a href="#"><i class="fa fa-facebook"></i></a>
+					<a href="#"><i class="fa fa-twitter"></i></a>
+					<a href="#"><i class="fa fa-linkedin"></i></a>
+					<a href="#"><i class="fa fa-github"></i></a>
+				</div>
+			</div>
+		</footer>
+

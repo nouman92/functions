@@ -1,13 +1,27 @@
-<?php
-include 'header.php';
+<!DOCTYPE>
+<html>
+<head>
+<title>Algorithem Executer</title>
+<script src="js/jquery.js"></script>
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script src="js/jquery-linedtextarea.js"></script>
+<script src="js/functions.js"></script>
 
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
+<link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Cookie'  type='text/css'>
+<link rel="stylesheet" href="css/bootstrap.min.css" />
+<link rel="stylesheet" href="css/style.css" />
+
+</head>
+
+<body >
+<?php include 'header.php';
 if (!isset($_SESSION['FBID']))
 {
- header("Location: index.php");
+ header("Location: login.php");
  die();
 }
 ?>
-
 
 <div class="row">
 	<div class="col-md-1"></div>
@@ -57,3 +71,5 @@ if (!isset($_SESSION['FBID']))
 }?>
 
 <?php include 'footer.php'; ?>
+</body>
+</html>

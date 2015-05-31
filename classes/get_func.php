@@ -1,5 +1,5 @@
 <?Php
-require './conf/dbconfig.php';
+require '../conf/dbconfig.php';
 ini_set('display_errors', 0);
 error_reporting(0);
 $in=$_GET['id'];
@@ -10,7 +10,7 @@ if(strlen($in)>0 and strlen($in) <20 ){
 		if (mysql_num_rows($check) != 0)
 		{
 			$nt = mysql_fetch_array($check);
-			$msg=$nt[0];
+			$msg.=$nt[0];
 		}
 		  
 	}
